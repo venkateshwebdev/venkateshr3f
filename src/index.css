@@ -1,0 +1,18 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+html,
+body {
+  background: rgb(252, 115, 69);
+  background: linear-gradient(
+    90deg,
+    rgba(252, 115, 69, 1) 0%,
+    rgba(252, 176, 69, 1) 100%
+  );
+}
+#root {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
