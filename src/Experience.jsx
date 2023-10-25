@@ -20,7 +20,6 @@ const Experience = () => {
         <OrbitControls
         enableZoom={false}
         maxPolarAngle={1.5}
-        // enableRotate={false}
       />
     </Canvas>
   );
