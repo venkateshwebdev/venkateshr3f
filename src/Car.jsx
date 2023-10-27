@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import { CuboidCollider, RigidBody } from "@react-three/rapier";
-import { useThree } from "@react-three/fiber";
-
+import { useFrame, useThree } from "@react-three/fiber";
+import * as THREE from "three"
 export function Car(props) {
   const group = useRef();
   const rigidRef = useRef();
@@ -16,23 +16,39 @@ export function Car(props) {
     }
     if(e.key==="ArrowDown"){
         rigidRef.current.applyImpulse({ x: 0, y:0, z: -0.5 })
+        // rigidRef.current.rotation.z=-Math.PI/2
+        // group.current.rotation.z=-Math.PI/2
     }
     if(e.key==="ArrowLeft"){
         rigidRef.current.applyImpulse({ x: -0.5, y:0, z: 0 })
+        // rigidRef.current.rotation.y=-Math.PI/2
+        // group.current.rotation.y=-Math.PI/2
     }
     if(e.key==="ArrowRight"){
         rigidRef.current.applyImpulse({ x: 0.5, y:0, z: 0 })
+        // rigidRef.current.rotation.y=Math.PI/2
+        // group.current.rotation.y=Math.PI/2
     }
-    // camera.lookAt([group.current.position.x,group.current.position.y,group.current.position.z])
-    // camera.position([group.current.position.x,group.current.position.y,group.current.position.z])
+    console.log(rigidRef.current)
   }
   useEffect(()=>{
     window.addEventListener("keydown",doSomething)
     return()=>window.removeEventListener("keydown",doSomething)
   },[])
+  useFrame((state,delta)=>{
+    const cameraPosition = new THREE.Vector3()
+    cameraPosition.copy(rigidRef.current.translation())
+    cameraPosition.z+=2.25
+    cameraPosition.y+=0.65
+    const cameraTarget = new THREE.Vector3()
+    cameraTarget.copy(rigidRef.current.translation())
+    cameraTarget.z+=0.25
+    state.camera.position.copy(cameraPosition)
+    state.camera.lookAt(cameraTarget)
+  })
   return (
-    <RigidBody restitution={0.5} ref={rigidRef} >
-    <group ref={group} {...props} dispose={null} scale={0.4} position={[0,0.1,-2]}>
+    <RigidBody ref={rigidRef} colliders={false} >
+    <group ref={group} {...props} dispose={null} scale={0.4} position={[0,0.5,-3]}>
       <group name="Sketchfab_Scene">
         <group
           name="Sketchfab_model"
@@ -63,7 +79,7 @@ export function Car(props) {
         </group>
       </group>
     </group>
-    {/* <CuboidCollider position={[0,0.1,-2]} args={[0.5,0.5,1]}/> */}
+    <CuboidCollider position={[0,0.5,-3]} args={[1,0.5,1]}/>
     </RigidBody>
   );
 }

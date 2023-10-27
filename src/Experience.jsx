@@ -1,8 +1,12 @@
 import {
+  CameraShake,
     ContactShadows,
+  KeyboardControls,
   OrbitControls,
+  OrthographicCamera,
   PerspectiveCamera,
   PresentationControls,
+  SoftShadows,
 } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import Scene from "./scene";
@@ -10,10 +14,17 @@ import { Physics } from "@react-three/rapier";
 
 const Experience = () => {
   return (
-    <Canvas shadows camera={{position:[3,2,5]}}>
-        <ContactShadows blur={3} />
-        <ambientLight intensity={1} />
-        <directionalLight intensity={1} position={[0, 5, 5]} />
+    <KeyboardControls map={[
+      {name:'forward',keys:['ArrowUp',"KeyW"]},
+      {name:'backward',keys:['ArrowDown',"KeyS"]},
+      {name:'leftward',keys:['ArrowLeft',"KeyA"]},
+      {name:'rightward',keys:['ArrowRight',"KeyD"]}
+    ]}>
+    <Canvas shadows>
+      <ContactShadows blur={8} />
+      <OrthographicCamera makeDefault zoom={70} near={-100} position={[2,0,5]} />
+        <ambientLight intensity={1} castShadow />
+        <directionalLight intensity={1} position={[3, 5, 5]} castShadow />
         <Physics >
           <Scene />
         </Physics>
@@ -22,6 +33,7 @@ const Experience = () => {
         maxPolarAngle={1.5}
       />
     </Canvas>
+    </KeyboardControls>
   );
 };
 
